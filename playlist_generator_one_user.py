@@ -1,5 +1,4 @@
 import pandas as pd
-from sklearn.datasets import make_blobs
 from scipy.spatial import distance
 import random
 

@@ -3,12 +3,12 @@ import secret_data
 import spotipy
 import spotipy.util as util
 import playlist_generator_one_user
-
+import classifier
 
 
 def convert_to_csv(playlist_df):
     playlist_df.drop(
-        columns=["artist", "album", "track_name"]).to_csv(
+        columns=["track_id","artist", "album", "track_name", "release_date",]).to_csv(
         "date_X_0.csv")
     playlist_df.filter(['artist', 'album', 'track_name']).to_csv("date_y_0.csv")
 
@@ -115,7 +115,15 @@ class PLAY:
 
 # In main se vor apela toate metodele, inclusiv cele ce tin de melodie
 if __name__ == '__main__':
-    playlist = PLAY()
-    playlist_datafr = playlist.analiza_playlist(secret_data.PLAY_CREATE, secret_data.PLAY_ID)
-    playlist_datafr = playlist_datafr.set_index('track_id')
-    convert_to_csv(playlist_datafr)
+    clasificator = classifier.Classified()
+    # Extragerea unui playlist fixat de pe Spotify
+    q = input("Alegeti intre extragerea pieselor din playlist public sau playlist personal(Liked Tracks): ")
+    if (q == '1'):
+        playlist = PLAY()
+        playlist_datafr = playlist.analiza_playlist(secret_data.PLAY_CREATE, secret_data.PLAY_ID)
+        convert_to_csv(playlist_datafr)
+    else:
+        preferate = PLAY()
+        preferate.create_spotify_playlist(preferate.sp)
+
+
