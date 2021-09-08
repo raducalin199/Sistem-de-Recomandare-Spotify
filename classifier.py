@@ -6,13 +6,14 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score
 
 
+
 class Classified:
     def __init__(self):
         dfx = self.dfx
         dfy = self.dfy
 
 
-    def generate_dataframes(dfx, dfy):
+    def generate_dataframes(self):
 
         dfx0 = pd.read_csv("date_X_complet.csv")
         dfx1 = pd.read_csv("date_X_0.csv")
@@ -46,7 +47,6 @@ class Classified:
         return muzica
     def cluster_PCA(self, muzica):
         # metoda pentru a  aplica PCA spre determinarea coordonatelor fiecarui rand
-        muzica = Classified.Scaling(self.dfx)
         pca = PCA().fit(muzica)
         evr = pca.explained_variance_ratio_
         print(evr)
@@ -54,7 +54,7 @@ class Classified:
         plt.plot(np.cumsum(pca.explained_variance_ratio_))
         plt.xlabel('number of dimensions')
         plt.ylabel('Explained variance');
-
+        return evr
 
 
     def get_optimal_n_cluster(self, muzica):
@@ -91,7 +91,7 @@ class Classified:
 
 if __name__ == '__main__':
 
-    X,y = Classified.generate_dataframes(X0, y0)
-
-
+    X,y = Classified.generate_dataframes()
+    X_scaled = Classified.Scaling(X)
+    muzica = Classified.KMeans_classifier(X)
 
